@@ -18,7 +18,7 @@ TEST_CHANNEL_LAYERS = {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     }
 }
-
+# HELPER FUNCTIONS:
 @database_sync_to_async
 def create_user(username, password, group='rider'):
     # Create user.
@@ -52,6 +52,8 @@ def create_trip(
         rider=rider,
         driver=driver 
     )
+
+# PRIMARY TESTING CLASS:
 # Requires pytest.ini to be in root folder:
 @pytest.mark.asyncio
 @pytest.mark.django_db(transaction=True)
