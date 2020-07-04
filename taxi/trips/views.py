@@ -3,7 +3,7 @@ from rest_framework import generics, permissions, viewsets
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.db.models import Q
 from .models import Trip
-from .serializers import UserSerializer, LogInSerializer, TripSerializer
+from .serializers import UserSerializer, LogInSerializer, TripSerializer, NestedTripSerializer
 
 class SignUpView(generics.CreateAPIView):
     queryset = get_user_model().objects.all()
@@ -17,7 +17,7 @@ class TripView(viewsets.ReadOnlyModelViewSet):
     lookup_url_kwarg = 'trip_id'
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Trip.objects.all()
-    serializer_class = TripSerializer
+    serializer_class = NestedTripSerializer
 
     def get_queryset(self):
         """

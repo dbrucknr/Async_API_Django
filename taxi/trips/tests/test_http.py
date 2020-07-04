@@ -7,6 +7,9 @@ from rest_framework.test import APITestCase
 from django.contrib.auth.models import Group
 from trips.serializers import TripSerializer, UserSerializer
 from trips.models import Trip
+from io import BytesIO
+from PIL import Image
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 PASSWORD = 'paSSw0rD?'
 
@@ -24,6 +27,11 @@ def create_user(
     user.save()
     return user
 
+def create_photo_file():
+    data = BytesIO()
+    Image.new('RGB', (100,100)).save(data, 'PNG')
+    data.seek(0)
+    return SimpleUploadedFile('photo.png', data.getvalue())
 
 class AuthenticationTest(APITestCase):
     def test_user_can_sign_up(self):
@@ -31,6 +39,7 @@ class AuthenticationTest(APITestCase):
         We expect our API to return a 201 status code when the user account is created.
         The response data should be a JSON-serialized representation of our user model.
         """
+        photo = create_photo_file()
         response = self.client.post(
             reverse('sign_up'), data = {
                 'username': 'user@example.com',
@@ -38,7 +47,8 @@ class AuthenticationTest(APITestCase):
                 'last_name': 'tester_last',
                 'password1': PASSWORD,
                 'password2': PASSWORD,
-                'group': 'rider'
+                'group': 'rider',
+                'photo': photo,
             })
         user = get_user_model().objects.last()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -47,6 +57,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(response.data['first_name'], user.first_name)
         self.assertEqual(response.data['last_name'], user.last_name)
         self.assertEqual(response.data['group'], user.group)
+        self.assertIsNotNone(user.photo)
 
     def test_can_user_log_in(self):
         user = create_user()
