@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': os.getenv('PGDATABASE'),
         'USER': os.getenv('PDUSER'),
         'PASSWORD': os.getenv('PGPASSWORD'),
-        'HOST': os.getenv('PGHOST', 'localhost'),
+        'HOST': os.getenv('PGHOST', 'taxi-database'),
         'PORT': os.getenv('PGPORT', '5432')
     }
 }
