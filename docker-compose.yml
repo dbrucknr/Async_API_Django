@@ -16,7 +16,7 @@ services:
   taxi-server:
     build: 
       context: ./server
-    command: python ./taxi/manage.py runserver 0.0.0.0:8000
+    command: daphne --bind 0.0.0.0 --port 8000 taxi.asgi:application
     container_name: taxi-server
     depends_on:
       - taxi-redis
@@ -29,7 +29,11 @@ services:
   taxi-client:
     build:
       context: ./client
+    volumes:  
+      - media:/taxi-app/media
+      - static:/taxi-app/static
     command: yarn run start
+    # Either stdin_open or tty needs to be set for the frontend process to start 
     stdin_open: true
     # tty: true
     container_name: taxi-client
@@ -37,6 +41,24 @@ services:
       - taxi-server
     ports:
       - 3001:3000
+    volumes:
+      - ./client:/taxi-app/
+
+  taxi-nginx:
+    build:
+      context: ./nginx
+    container_name: taxi-nginx
+    depends_on:
+      - taxi-server
+      - taxi-client
+    ports:
+      - 8080:80
+    restart: always
+    volumes:
+      - media:/taxi-app/media
+      - static:/taxi-app/static
 
 volumes:
     taxi-database:
+    media:
+    static: 

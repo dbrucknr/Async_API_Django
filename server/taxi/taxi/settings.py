@@ -26,7 +26,8 @@ SECRET_KEY = 'f1tf#_z&#48#3&ds)g^ee)3yaw&l47cumug&3+0bqc&by-^1*8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# change this to an explicit setting for prod work.
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -130,7 +131,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/staticfiles/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, '../../static')
 
 ASGI_APPLICATION = 'taxi.routing.application'
 

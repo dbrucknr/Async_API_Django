@@ -28,4 +28,5 @@ urlpatterns = [
     path('api/trip/', include('trips.urls', 'trip', )),
 ] 
 # Development Only - Remove if/when production release
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Setting aside for NGINX config - relates to STATIC_URL config
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

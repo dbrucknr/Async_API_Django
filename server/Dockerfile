@@ -16,3 +16,7 @@ RUN pip install pipenv && pipenv install --system
 
 # Gather remaining files/folders
 COPY . /taxi-app/
+
+WORKDIR /taxi-app/taxi
+
+RUN python manage.py collectstatic --noinput
